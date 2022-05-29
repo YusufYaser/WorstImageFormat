@@ -18,14 +18,17 @@ There are multiple issues with this image format which I'm working on fixing the
 
 1. You need to download the repository files
 2. Get any kind of image, and convert it using `./main.py convert <source> <output>`. (You may need to allow execution using `chmod +x ./main.py`)
-3. After conversion is done, run `./main <output>`
+3. After conversion is done, run `./main.py <output>`
 
 # Usage
 
 ```bash
 # convert normal image format to worst image format
-./main convert <source> <output>
+./main.py convert <source> <output>
 
-# view the image
-./main <image>
+# generate a random image
+./main.py random <width> <height> <output>
+
+# view an image
+./main.py <image>
 ```
