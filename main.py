@@ -33,7 +33,6 @@ if sys.argv[1] == "convert":
         print("Source image is corrupt!")
         exit(1)
 
-    srcpx = source.load()
     width = source.width
     height = source.height
     data = ""
@@ -48,10 +47,14 @@ if sys.argv[1] == "convert":
 
     for x in range(width):
         for y in range(height):
-            pixel = srcpx[x, y]
-            data += chr(pixel[0])
-            data += chr(pixel[1])
-            data += chr(pixel[2])
+            pixel = source.getpixel((x, y))
+            for i in range(3):
+                if pixel[i] == 10:
+                    data += chr(11)
+                elif pixel[i] == 13:
+                    data += chr(14)
+                else:
+                    data += chr(pixel[i])
 
     output.write("1," + str(width) + "," + str(height) + "\n" + data)
     
@@ -98,7 +101,6 @@ try:
 
 
     print("Reading image")
-    print(" 0%\r", end="")
 
     dim = image.readline().replace("\n", "").split(",")
     dim[0] = int(dim[2])
@@ -125,6 +127,8 @@ try:
     y = 1
     at = 0
     max = dim[0] * dim[1]
+    print("Rendering image")
+    print(" 0%\r", end="")
     for pixel in pixels:
         rgb = (ord(pixel[0]), ord(pixel[1]), ord(pixel[2]))
         hex = '#%02x%02x%02x' % rgb
