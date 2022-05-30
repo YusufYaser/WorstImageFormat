@@ -1,4 +1,3 @@
-tkinter
-PIL
-random
-re
+tk
+pillow
+regex

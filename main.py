@@ -48,13 +48,11 @@ if sys.argv[1] == "convert":
     for x in range(width):
         for y in range(height):
             pixel = source.getpixel((x, y))
-            for i in range(3):
-                if pixel[i] == 10:
-                    data += chr(11)
-                elif pixel[i] == 13:
-                    data += chr(14)
+            for color in pixel:
+                if color == 10 or color == 13:
+                    data += chr(color + 1)
                 else:
-                    data += chr(pixel[i])
+                    data += chr(color)
 
     output.write("1," + str(width) + "," + str(height) + "\n" + data)
     
@@ -108,7 +106,7 @@ try:
 
     window = Tk()
     window.resizable(False, False)
-    window.title(image.name)
+    window.title(image.name + " - " + str(int(dim[1])) + "x" + str(int(dim[0])) + " scaled by " + str(scale))
     window.geometry(str(int(dim[1] * scale)) + "x" + str(int(dim[0] * scale)))
 
     data = image.read()
