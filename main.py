@@ -12,6 +12,7 @@ from tkinter import *
 from PIL import Image, UnidentifiedImageError
 import random
 import re
+import time
 
 if len(sys.argv) < 2:
     print("Usage: " + sys.argv[0] + " <image_path> [scale]")
@@ -89,6 +90,24 @@ except FileNotFoundError:
     print("This file was not found!")
     exit(2)
 
+def GetUnixTime():
+    return round(time.time())
+
+def TimeFormat(seconds):
+    d = seconds // (3600 * 24)
+    h = seconds // 3600 % 24
+    m = seconds % 3600 // 60
+    s = seconds % 3600 % 60
+    if d > 0:
+        return '{:02d}d {:02d}h {:02d}m {:02d}s'.format(d, h, m, s)
+    elif h > 0:
+        return '{:02d}h {:02d}m {:02d}s'.format(h, m, s)
+    elif m > 0:
+        return '{:02d}m {:02d}s'.format(m, s)
+    elif s > 0:
+        return '{:02d}s'.format(s)
+
+
 try:
     try:
         scale = int(sys.argv[2])
@@ -125,12 +144,20 @@ try:
     y = 1
     at = 0
     max = dim[0] * dim[1]
+    speed = 0
+    lastsecond = GetUnixTime()
+    remaining = "unknown"
+    completed = 0
     print("Rendering image")
     print(" 0%\r", end="")
     for pixel in pixels:
         rgb = (ord(pixel[0]), ord(pixel[1]), ord(pixel[2]))
         hex = '#%02x%02x%02x' % rgb
-        print(" " + int(at / max * 100).__str__() + "%    \r", end="")
+        if not lastsecond == GetUnixTime():
+            remaining = TimeFormat(round((max - completed) / speed))
+            speed = 0
+            lastsecond = GetUnixTime()
+        print(" " + str(round(at / max * 100, 1)) + "% - " + remaining + " remaining                      \r", end="")
 
         if x > dim[0]:
             x = 1
@@ -146,10 +173,12 @@ try:
         
         x += 1
         at += 1
+        speed += 1
+        completed += 1
     
     window.protocol('WM_DELETE_WINDOW', window.destroy)
         
-    print("Viewing image")
+    print("Viewing image            ")
 
     window.mainloop()
 
