@@ -177,15 +177,22 @@ try:
         speed += 1
     
     window.protocol('WM_DELETE_WINDOW', window.destroy)
-        
-    print("Viewing image            ")
+    
+    if at < max:
+        print("Unexpected EOF, showing image anyways")
+
+    print("Showing image                   ")
 
     window.mainloop()
 
-except IndexError:
+except IndexError as e:
+    print("There was an error, attempting showing image anyways")
+    print(e)
     window.mainloop()
-except ValueError:
+except ValueError as e:
+    print("There was an error, attempting showing image anyways")
+    print(e)
     window.mainloop()
 except KeyboardInterrupt:
-    print("\nCancelled")
+    print("Cancelled")
     exit(3)
