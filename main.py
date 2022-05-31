@@ -49,11 +49,13 @@ if sys.argv[1] == "convert":
     for x in range(width):
         for y in range(height):
             pixel = source.getpixel((x, y))
-            for color in pixel:
-                if color == 10 or color == 13:
-                    data += chr(color + 1)
+            for i in range(3):
+                if pixel[i] == 10:
+                    data += chr(11)
+                elif pixel[i] == 13:
+                    data += chr(14)
                 else:
-                    data += chr(color)
+                    data += chr(pixel[i])
 
     output.write("1," + str(width) + "," + str(height) + "\n" + data)
     
@@ -147,17 +149,16 @@ try:
     speed = 0
     lastsecond = GetUnixTime()
     remaining = "unknown"
-    completed = 0
     print("Rendering image")
     print(" 0%\r", end="")
     for pixel in pixels:
         rgb = (ord(pixel[0]), ord(pixel[1]), ord(pixel[2]))
         hex = '#%02x%02x%02x' % rgb
         if not lastsecond == GetUnixTime():
-            remaining = TimeFormat(round((max - completed) / speed))
+            remaining = TimeFormat(round((max - at) / speed))
             speed = 0
             lastsecond = GetUnixTime()
-        print(" " + str(round(at / max * 100, 1)) + "% - " + remaining + " remaining                      \r", end="")
+        print(" " + str(round(at / max * 100, 1)) + "% - " + str(remaining) + " remaining                      \r", end="")
 
         if x > dim[0]:
             x = 1
@@ -174,7 +175,6 @@ try:
         x += 1
         at += 1
         speed += 1
-        completed += 1
     
     window.protocol('WM_DELETE_WINDOW', window.destroy)
         
