@@ -26,7 +26,7 @@ if sys.argv[1] == "convert":
         exit(1)
 
     try:
-        source = Image.open(sys.argv[2])
+        source = Image.open(sys.argv[2]).convert('RGB')
     except FileNotFoundError:
         print("Source file not found!")
         exit(1)
@@ -48,14 +48,22 @@ if sys.argv[1] == "convert":
 
     for x in range(width):
         for y in range(height):
-            pixel = source.getpixel((x, y))
-            for i in range(3):
-                if pixel[i] == 10:
-                    data += chr(11)
-                elif pixel[i] == 13:
-                    data += chr(14)
-                else:
-                    data += chr(pixel[i])
+            r, g, b = source.getpixel((x, y))
+            
+            if r == 10 or r == 13:
+                data += chr(r + 1)
+            else:
+                data += chr(r)
+            
+            if g == 10 or g == 13:
+                data += chr(g + 1)
+            else:
+                data += chr(g)
+            
+            if b == 10 or b == 13:
+                data += chr(b + 1)
+            else:
+                data += chr(b)
 
     output.write("1," + str(width) + "," + str(height) + "\n" + data)
     
