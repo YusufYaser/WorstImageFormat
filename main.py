@@ -172,13 +172,12 @@ try:
             x = 1
             y += 1
 
-        for sx in range(scale):
-            for sy in range(scale):
-                canvas.create_rectangle(
-                    y * scale + sx, x * scale + sy, y * scale + sx, x * scale + sy,
-                    outline = hex,
-                    fill = hex
-                )
+        canvas.create_rectangle(
+            y * scale, x * scale,
+            y * pow(scale, 2), x * pow(scale, 2),
+            outline = hex,
+            fill = hex
+        )
         
         x += 1
         at += 1
@@ -193,11 +192,7 @@ try:
 
     window.mainloop()
 
-except IndexError as e:
-    print("There was an error, attempting showing image anyways")
-    print(e)
-    window.mainloop()
-except ValueError as e:
+except IndexError or ValueError as e:
     print("There was an error, attempting showing image anyways")
     print(e)
     window.mainloop()
