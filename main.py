@@ -9,7 +9,6 @@
 
 import sys
 from tkinter import *
-from PIL import Image, UnidentifiedImageError
 import re
 import time
 
@@ -56,7 +55,7 @@ def main():
     try:
         try:
             scale = int(sys.argv[2])
-        except ValueError or IndexError:
+        except Exception:
             scale = 1
 
 
@@ -125,7 +124,7 @@ def main():
 
         window.mainloop()
 
-    except IndexError or ValueError as e:
+    except Exception as e:
         print("There was an error, attempting showing image anyways")
         print(e)
         window.mainloop()
